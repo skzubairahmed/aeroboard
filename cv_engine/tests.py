@@ -10,10 +10,10 @@ while True:
         print("Received empty frame, skipping...")
         continue
 
-    if frame.size == 0:
+    if frame is not None and frame.size == 0:
         print("Received frame of size 0x0, skipping...")
         continue
-    cam.addFps(frame)
+    frame = cam.addFps(frame)
     cv2.imshow("original frame", frame)
     if cv2.waitKey(1) & 0xFF == 27:
         break

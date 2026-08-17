@@ -7,6 +7,12 @@ class Tracker:
         self.frame = None
         self.cap = cv2.VideoCapture(camera_idx, cv2.CAP_DSHOW)
 
+        self.prev_time = time.time()
+        self.smoothed_fps = 0
+
+        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.75)
+        self.cap.set(cv2.CAP_PROP_SETTINGS, 1)
+
     def showFrames(self): #for demo/tests
         window_name = "Original Frame"
         cv2.namedWindow(window_name)
@@ -20,7 +26,7 @@ class Tracker:
                 
                 self.frame = cv2.flip(self.frame, 1)
                 key = (cv2.waitKey(1) & 0xFF)
-                
+
                 cv2.imshow(window_name, self.frame)
                 
                 if key == 27:
@@ -38,46 +44,36 @@ class Tracker:
         try:
             ret, self.frame = self.cap.read()
             
-            if not ret:
-                print("Failed to grab frame, skipping...")
-
-            if self.frame.size == 0:
-                print("Received frame of 0x0 size, skipping...")
+            if not ret or self.frame is None or self.frame.size == 0:
+                return None, False, "Failed to get valid frame."
 
             self.frame = cv2.flip(self.frame, 1)
-
             return self.frame, ret, "success"
 
         except Exception as e:
             return None, f"An error occured: {e}"
 
-    def addFps(frame):
-        prev_time = 0
-        smoothed_fps = 0
-
+    def addFps(self, frame):
         try:
-            while True:
-                curr_time = time.time()
+            curr_time = time.time()
+            time_diff = curr_time - self.prev_time
+            self.prev_time = curr_time
             
-                time_diff = curr_time - prev_time
-                prev_time = curr_time
-            
-                if time_diff > 0:
-                    instant_fps = 1 / time_diff
-                    smoothed_fps = (smoothed_fps * 0.9) + (instant_fps * 0.1)
+            if time_diff > 0:
+                instant_fps = 1 / time_diff
+                self.smoothed_fps = (self.smoothed_fps * 0.9) + (instant_fps * 0.1)
 
-                fps_text = f"FPS: {int(smoothed_fps)}"
-
-                cv2.putText(
-                    frame,
-                    fps_text,
-                    (20, 50),
-                    cv2.FONT_HERSHEY_DUPLEX,
-                    1,
-                    (255, 0, 0),
-                    1.5
-                )
-
+            fps_text = f"FPS: {int(self.smoothed_fps)}"
+            cv2.putText(
+                frame,
+                fps_text,
+                (20, 50),
+                cv2.FONT_HERSHEY_DUPLEX,
+                1,
+                (255, 0, 0),
+                2
+            )
+            return frame
         except Exception as e:
             return "Unable to put FPS."
             
