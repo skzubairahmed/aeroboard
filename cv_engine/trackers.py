@@ -11,15 +11,28 @@ class Tracker:
         cv2.namedWindow(window_name)
 
         try:
-            ret, self.frame = self.cap.read()
+            while True:
+                ret, self.frame = self.cap.read()
+                
+                if not ret:
+                    return "Unable to read camera."
+                
+                self.frame = cv2.flip(self.frame, 1)
+                key = (cv2.waitKey(1) & 0xFF)
+                
+                cv2.imshow(window_name, self.frame)
+                
+                if key == 27:
+                    break
+                
+                if cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
+                    break
+            cv2.destroyAllWindows()
+            self.cap.release()
 
-            if not ret:
-                return "Unable to read camera."
+        except Exception as e:
+            return f"An error occured: {e}"
 
-            self.frame = cv2.flip(self.frame, 1)
-            key = (cv2.waitKey(1) & 0xFF)
-
-            cv2.imshow()
 
             
 
