@@ -1,6 +1,5 @@
 import cv2
 import time
-import mediapipe as mp
 
 class Tracker:
     def __init__(self, camera_idx:int = 0):
@@ -12,17 +11,7 @@ class Tracker:
         self.smoothed_fps = 0
 
         self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.75)
-        self.cap.set(cv2.CAP_PROP_SETTINGS, 1)
-
-        self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(
-            static_image_mode = False,
-            minimum_detection_confidence = 0.7,
-            minimum_tracking_confidence = 0.5,
-            max_num_hands = 1
-        )
-        self.mp_draw = mp.solutions.drawing_utils
-        self.mp_drawing_styles = mp.solutions.drawing_styles
+        #self.cap.set(cv2.CAP_PROP_SETTINGS, 1)
 
     def showFrames(self): #for demo/tests
         window_name = "Original Frame"
@@ -88,30 +77,3 @@ class Tracker:
             return frame
         except Exception as e:
             return "Unable to put FPS."
-
-    def processHands(self, frame):
-        try:
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-            rgb_frame.flags.writeable = False
-            results = self.hands.process(rgb_frame)
-
-            rgb_frame.flags.writeable = True
-
-            display_frame = frame.copy()
-
-            if results.multi_hand_landmarks:
-                for hand_landmarks in results.multi_hand_landmarks:
-                    self.mp_draw.draw_landmarks(
-                        display_frame,
-                        hand_landmarks,
-                        self.mp_drawing_styles.get_default_hand_landmarks_style(),
-                        self.mp_drawing_styles.get_default_hand_connections_style()
-                    )
-            return display_frame
-
-        except Exception as e:
-            print(f"Hand processing error: {e}")
-            return frame
-
-        
