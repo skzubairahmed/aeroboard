@@ -97,12 +97,12 @@ class Tracker:
             for hand in hands:
                 lm_list = hand["lmList"]
 
-                self.lm_points = [
-                    lm_list[4],
-                    lm_list[8],
-                    lm_list[12],
-                    lm_list[16],
-                    lm_list[20]
-                ]
+                self.lm_points = {
+                    4:lm_list[4],
+                    8:lm_list[8],
+                    12:lm_list[12],
+                    16:lm_list[16],
+                    20:lm_list[20]
+                }
 
                 return self.lm_points

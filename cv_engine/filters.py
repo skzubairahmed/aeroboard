@@ -17,7 +17,7 @@ class SimpleKalmanFilter2D():
         self.initialized = False
 
     def smooth(self, x, y):
-        measurement = np.array([np.float32(x), np.float32(y)], np.float32)
+        measurement = np.array([[np.float32(x)], [np.float32(y)]], np.float32)
 
         if not self.initialized:
             self.kf.statePre = np.array(
@@ -25,3 +25,8 @@ class SimpleKalmanFilter2D():
             )
 
             self.initialized = True
+            return x, y
+
+        self.kf.predict()
+        corrected = self.kf.correct(measurement)
+        return int(corrected[0,0]), int(corrected[1,0])
