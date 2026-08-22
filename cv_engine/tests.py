@@ -41,6 +41,16 @@ class Aeroboard():
                 else:
                     self.last_frame = self.frame
 
+                dup_frame = self.frame.copy()
+                lm_points = self.cam.detectHand(self.frame, draw=False)
+                
+                if lm_points is not None:
+                    for point in lm_points:
+                        x = point[0]
+                        y = point[1]
+                        cv2.circle(self.frame, (x, y), 10, (0, 0, 255), 2)
+                        cv2.circle(self.frame, (x, y), 8, (0, 255, 0), cv2.FILLED)
+                print(lm_points)
                 cv2.imshow(window_name, self.frame)
 
                 key = (cv2.waitKey(1) & 0xFF)
@@ -48,7 +58,6 @@ class Aeroboard():
                     break
 
             except Exception as e:
-                print("exception kiya")
                 self.logger.logData("PYTHON_INTERNAL_EXCEPTION", f"{e.args}")
                 cv2.imshow(window_name, self.last_frame)
 

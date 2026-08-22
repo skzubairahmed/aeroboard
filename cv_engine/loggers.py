@@ -1,4 +1,3 @@
-import os
 import datetime
 class Logger():
     def __init__(self, file_path):
@@ -10,8 +9,11 @@ class Logger():
             timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             log = f"[{code}] [{timestamp_str}] --- {message}\n"
             with open(self.file_path, 'a', encoding="utf-8") as file:
-                file.append(log)
+                file.write(log)
             return None
         except Exception as e:
             print("An error occured in the logger") #Add some actual error managmenet here later!!!
+
+    def clearLogs(self):
+        print("Clearing...")
             

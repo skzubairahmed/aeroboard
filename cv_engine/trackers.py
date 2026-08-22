@@ -1,5 +1,6 @@
 import cv2
 import time
+from cvzone.HandTrackingModule import HandDetector
 
 class Tracker:
     def __init__(self, camera_idx:int = 0):
@@ -9,6 +10,14 @@ class Tracker:
 
         self.prev_time = time.time()
         self.smoothed_fps = 0
+
+        self.detector = HandDetector(
+            staticMode=False,
+            maxHands=1,
+            minTrackCon=0.5,
+            detectionCon=0.5
+        )
+        self.lm_points:list = None
 
         self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.75)
         #self.cap.set(cv2.CAP_PROP_SETTINGS, 1)
@@ -77,3 +86,23 @@ class Tracker:
             return frame
         except Exception as e:
             return "Unable to put FPS."
+
+    def detectHand(self, frame, draw:bool):
+        if frame is None:
+            self.lm_points = None
+
+        hands, frame = self.detector.findHands(frame, draw=draw)
+
+        if hands:
+            for hand in hands:
+                lm_list = hand["lmList"]
+
+                self.lm_points = [
+                    lm_list[4],
+                    lm_list[8],
+                    lm_list[12],
+                    lm_list[16],
+                    lm_list[20]
+                ]
+
+                return self.lm_points
