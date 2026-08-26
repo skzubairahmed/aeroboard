@@ -7,6 +7,18 @@ This is a opencv based air-whiteboard, you can draw anything using 3 main colour
 
 ---
 
+FEATURES:-
+1. Finger tracking- The application can track all five fingers of any one hand at a time.
+
+2. Gesture recognition - The application can predict what gesture you are using. For this version, I have added two main gestures(The PEN andn The POINTER), to use the PEN, you mest touch your index finger and thumb finger tips together, you will know that DRAW mode is turned on when the index finger and thumb finger tips glow with yello dots. To use the POINTER gesture, you must make a upward pointing gesture with you index finger.
+
+3. Drawing - You can draw with the PEN geture, but remember that you must draw slowly(PS: THIS IS STILL THE alpha VERSION AND I'LL IMPROVE IT MORE.)
+
+4. Changing colour - You can change color by clicking on any of the given colour options while using the POINTER gesture
+
+5. Clearing - You can clear the screen by clicking on the Clear button using the POINTER gesture.
+
+
 What I used for doing what?
 
 1. Tracking:
