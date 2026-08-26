@@ -134,9 +134,12 @@ class AeroBoard:
                     print(self.is_drawing)
 
                     index_x, index_y = self.fingertip_filters[8].smooth(lm_points[8][0], lm_points[8][1])
+                    thumb_x, thumb_y = self.fingertip_filters[4].smooth(lm_points[4][0], lm_points[4][1])
 
+                    avg_x = (thumb_x+index_x) // 2
+                    avg_y = (thumb_y+index_y) // 2
                     if self.is_drawing:
-                        self.current_stroke.append((index_x, index_y))
+                        self.current_stroke.append((avg_x, avg_y))
                         self.was_drawing = True
                     else:
                         if self.was_drawing and len(self.current_stroke) > 0:
