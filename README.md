@@ -39,6 +39,17 @@ What I used for doing what?
 
     I have made some of my own code for the AirButtons used to change the pen color and to clear the screen.
 
+Correct gesture for PEN:- 
+
+![PEN GESTURE](./cv_engine/images/pen.jpg)
+
+Correct gesture for POINTER:-
+
+![POINTER GESTURE](./cv_engine/images/pointer.jpg)
+
+PS: I ADVICE YOU TO USE THE EXACT CORRECT GESTURES TO MAKE THE STROKES SMOOTHLY.
+---
+
 That pretty much sums it all up.
 
 The application is only available for windows(.exe)*
